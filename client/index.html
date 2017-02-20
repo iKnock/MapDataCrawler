@@ -1,0 +1,62 @@
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link href="css/font-style.css" rel="stylesheet" />
+
+    <link href="vendors/bootstrap-3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendors/bootstrap-3.2.0/css/bootstrap-theme.css" rel="stylesheet">
+
+    <link href="vendors/leaflet-0.7.3/leaflet.css" rel="stylesheet">
+    <link href="vendors/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="vendors/topcoat/css/topcoat-mobile-light.min.css" rel="stylesheet">
+    <link href="vendors/font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="css/styles.css" rel="stylesheet">
+
+    <link href="vendors/angular-toster/toaster.css" rel="stylesheet">
+    <link href="vendors/leaflet.draw.css" rel="stylesheet">
+
+    <script src="vendors/jquery/jquery.js"></script>
+    <script src="vendors/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+
+    <script src="vendors/leaflet-0.7.3/leaflet.js"></script>
+    <script src="vendors/Leaflet.draw.js"></script>
+
+    <script src="lib/angular-file-upload-shim.min.js"></script>
+    <script src="lib/angular.js"></script>
+    <script src="lib/angular-file-upload.min.js"></script>
+    <script src="lib/angular-leaflet-directive.min.js"></script>
+
+    <script src="vendors/angular-simple-logger.min.js"></script>
+    <script src="vendors/plotly.min.js"></script>
+    <script src="vendors/angular-plotly.js"></script>
+    <script src="vendors/ui-leaflet.min.js"></script>
+    <script src="lib/jquery-ui.min.js"></script>
+    <script src="lib/lodash.compat.js"></script>
+    <script src="vendors/Leaflet-awsome-marker/leaflet.awesome-markers.min.js"></script>
+    <script src="vendors/FileSaver.js-master/FileSaver.min.js"></script>
+
+    <script src="lib/angular-touch.js"></script>
+    <script src="lib/angular-resource.js"></script>
+    <script src="lib/angular-animate.js"></script>
+    <script src="lib/angular-route.js"></script>
+    <script src="vendors/angular-toster/toaster.js"></script>
+    <script src="lib/ui-bootstrap-0.11.0.js"></script>
+    <script src="lib/ui-bootstrap-tpls-0.11.0.js"></script>
+
+    <script src="vendors/turf.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/rest-services.js"></script>
+
+</head>
+
+<body ng-controller="MainCtrl">
+<toaster-container toaster-options="{'position-class': 'toast-top-full-width'}"></toaster-container>
+<div ng-view ng-class="container-fluid">
+</div>
+
+</body>
+</html>
