@@ -16,15 +16,22 @@ is an Application to fetch data from Openstreet map by consuming the read only O
     -MongoDB  
     -Mongodb npm
 ## Functional Requirments
-    >Create Grid    
+    Create Grid    
         Using this functionality of the system the user can create a square grid structure of a certain region of a map.  
         It simply implements the squareGrid API of Turf.js. The API takes a bounding box and a cell width and returns  
         a set of square polygons in a grid.
         Bounding box = [minLat, minLong, maxLat, maxLong]
-    >Fetch Data  
+    Fetch Data  
     Using this functionality of the system the user can retrieve the raw data found in each box using the OverpassAPI service  
     Dump the data in to different MongoDB collections which are dynamically created, one for each category  
     I execute four different overpass queries to bring all the data for each category
+    Analyze Data  
+    This functionality the system count the point of interests found in each box according to their categories   
+    Put the result in a separate MongoDb collection  
+    Display Summary  
+    In this functionality the system collect the data found in each category collection  
+    Combine them into readable format in one Mongodb collection  
+    Fetch to the client side and display it on the web page in table format.  
 ## Dependencies  
   1. install Node.js version 4.2.1   
   2. install MongoDB  
