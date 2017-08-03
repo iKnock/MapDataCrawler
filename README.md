@@ -17,7 +17,7 @@ is an Application to fetch data from Openstreet map by consuming the read only O
     -Mongodb npm  
       
         
-## Functional Requirments
+### Functional Requirments
     Create Grid    
         Using this functionality of the system the user can create a square grid structure of a certain region of a map.  
         It simply implements the squareGrid API of Turf.js. The API takes a bounding box and a cell width and returns  
