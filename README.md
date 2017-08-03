@@ -22,16 +22,27 @@ is an Application to fetch data from Openstreet map by consuming the read only O
         a set of square polygons in a grid.
         Bounding box = [minLat, minLong, maxLat, maxLong]
     Fetch Data  
-    Using this functionality of the system the user can retrieve the raw data found in each box using the OverpassAPI service  
-    Dump the data in to different MongoDB collections which are dynamically created, one for each category  
-    I execute four different overpass queries to bring all the data for each category
+        Using this functionality of the system the user can retrieve the raw data found in each box using the OverpassAPI service  
+        Dump the data in to different MongoDB collections which are dynamically created, one for each category  
+        I execute four different overpass queries to bring all the data for each category
     Analyze Data  
-    This functionality the system count the point of interests found in each box according to their categories   
-    Put the result in a separate MongoDb collection  
+        This functionality the system count the point of interests found in each box according to their categories   
+        Put the result in a separate MongoDb collection  
     Display Summary  
-    In this functionality the system collect the data found in each category collection  
-    Combine them into readable format in one Mongodb collection  
-    Fetch to the client side and display it on the web page in table format.  
+        In this functionality the system collect the data found in each category collection  
+        Combine them into readable format in one Mongodb collection  
+        Fetch to the client side and display it on the web page in table format.    
+    Plot Distribution    
+        This functionality creates chart using plotlyjs which is interactive JavaScript graphing library to shows  
+        the distribution of the data across the boxes.  
+    Export to Excel  
+        Using this functionality of the system the user is able to export the summarized data which is displayed  
+        in table format on the web page in to excel using only one click.  
+    Clean All Data
+        The data crawler is needed to be reset when the user needs to crawl data on another geographical location  
+        In this case the user can click on clean all data button to clean all the data from the database  
+        and start new session on another location
+
 ## Dependencies  
   1. install Node.js version 4.2.1   
   2. install MongoDB  
