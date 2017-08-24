@@ -55,3 +55,5 @@ is an Application to fetch data from Openstreet map by consuming the read only O
   This will install all the npm modules required for this project  
   and to run the application after you started MongoDB  
       **node server.js**  
+  Open your browser and go to
+  http://localhost:3000
