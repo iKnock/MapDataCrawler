@@ -3,7 +3,7 @@ is an Application to fetch data from Openstreet map by consuming the read only O
     1. Can partition or make grid to a certain geographical area (a rectangle on a map) according to user provided inputs (the four corner of the rectangle and width of square box for the grid).  
     2. Fetch data describing each box (Grid) from Openstreet map using the read only Overpass API  
     3. Preprocess and store the fetched data in appropriate way  
-    4. Present the result  
+    4. Present the result      
 ## Tools Used
     -bootstrap.js
     -Angular.js
@@ -14,9 +14,8 @@ is an Application to fetch data from Openstreet map by consuming the read only O
     -Overpass API  
     -query-overpass npm
     -MongoDB  
-    -Mongodb npm  
-      
-        
+    -Mongodb npm             
+    
 ## Functional Requirments
     1. Create Grid    
         Using this functionality of the system the user can create a square grid structure 
@@ -45,7 +44,7 @@ is an Application to fetch data from Openstreet map by consuming the read only O
         The data crawler is needed to be reset when the user needs to crawl data on another 
         geographical location In this case the user can click on clean all data button to 
         clean all the data from the database and start new session on another location
-
+        
 ## Dependencies  
   1. install Node.js version 4.2.1   
   2. install MongoDB  
