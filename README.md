@@ -22,6 +22,9 @@ is an Application to fetch data from Openstreet map by consuming the read only O
         of a certain region of a map. It simply implements the squareGrid API of Turf.js. 
         The API takes a bounding box and a cell width and returns a set of square polygons in a grid.
         Bounding box = [minLat, minLong, maxLat, maxLong]
+        
+        ![homepg](https://user-images.githubusercontent.com/5079828/35702924-bd6613c4-079a-11e8-87c6-71f5381ba83c.png)
+        
     2. Fetch Data  
         Using this functionality of the system the user can retrieve the raw data found in each 
         box using the OverpassAPI service Dump the data in to different MongoDB collections 
