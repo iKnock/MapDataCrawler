@@ -348,9 +348,18 @@ exports.getProcessedData = function(req, res) {
 
 exports.prepareAnalyseData = function(req,res){
     var succ = [];
-    setTimeout(countCategory('tourism'), 2000);
-    setTimeout(countCategory('shop'), 2000);
-    setTimeout(countCategory('sport'), 2000);
+    setTimeout(function(){
+        countCategory('tourism')
+    }, 2000);
+
+    setTimeout(function(){
+        countCategory('shop')
+    }, 2000);
+
+    setTimeout(function(){
+        countCategory('sport')
+    }, 2000);
+
     countCategoryInAmenity();
     succ.push({value: "success"});
     res.json(succ);
@@ -404,7 +413,7 @@ pointOfInterestInAllBbox = function(req, res) {
 };
 //pointOfInterestInAllBbox();
 **/
-
+/**
 exports.pointOfInterestInBbox = function(req, res) {
     var south = req.params.south;
     var west = req.params.west;
@@ -433,6 +442,42 @@ exports.pointOfInterestInBbox = function(req, res) {
                         }), 3000);
                     }
                 }), 3000);
+            }
+        });
+    });
+};**/
+
+
+exports.pointOfInterestInBbox = function(req, res) {
+    var south = req.params.south;
+    var west = req.params.west;
+    var north = req.params.north;
+    var east = req.params.east;
+    var boxId = req.params.boxId;
+    var boxSize = req.params.boxSize;
+    insertBoxSize(boxSize, function(inserted){
+        console.log('inserted!');
+        getQueryAmenity(south,west,north,east,boxId, function(inserted){
+            if(inserted=='success'){
+                console.log("query amenity is called");
+                res.json([{inserted: true}]);
+                /**setTimeout(getQueryTourism(south,west,north,east,boxId, function(inserted){
+                    if(inserted=='success'){
+                        setTimeout(getQueryShop(south,west,north,east,boxId, function(inserted){
+                            if(inserted=='success'){
+                                setTimeout(getQuerySport(south,west,north,east,boxId, function(inserted){
+                                    if(inserted=='success'){
+                                        setTimeout(getQueryTourism(south,west,north,east,boxId, function(inserted){
+                                            if(inserted=='success'){
+                                                res.json([{inserted: true}]);
+                                            }
+                                        }), 3000);
+                                    }
+                                }), 3000);
+                            }
+                        }), 3000);
+                    }
+                }), 3000);**/
             }
         });
     });
