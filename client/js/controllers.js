@@ -14,32 +14,11 @@ angular.module('myApp.controllers', [])
                 $location.url(path);
             };
 
-            $rootScope.defaultLat = 43.7228;
-            $rootScope.defaultLng = 10.4017;
+            $rootScope.defaultLat = 45.560193;
+            $rootScope.defaultLng = 8.049105;
 
-            //usage is like  $scope.putMarker(parseFloat(listDetail.latitude), parseFloat(listDetail.longtiude), msg, true, false);
-            $rootScope.putMarker = function(lat, lng, msg, focus, draggable){
-                $scope.markers = [];
-                if(msg !== 'N/A'){
-                    $scope.markers.push({
-                        lat: lat,
-                        lng: lng,
-                        message: msg,
-                        focus: focus,
-                        draggable: draggable
-                    });
-                }else{
-                    $scope.markers.push({
-                        lat: lat,
-                        lng: lng,
-                        focus: focus,
-                        draggable: draggable
-                    });
-                }
-            };
 
             //===================
-
             $rootScope.reloadPage = function(){
                 $window.location.reload();
             };
@@ -51,6 +30,11 @@ angular.module('myApp.controllers', [])
     .controller('EssMapCtrl', ['$scope', '$rootScope', '$window', '$routeParams', 'dataFactory', 'toaster', 'leafletData',
         function ($scope, $rootScope, $window, $routeParams, dataFactory, toaster, leafletData) {
             angular.extend($scope, {
+                center:{
+                    lat: Number($scope.defaultLat),
+                    lng: Number($scope.defaultLng),
+                    zoom: 13
+                },
                 events: {
                     map: {
                         enable: ['zoomstart', 'drag', 'click', 'mousemove'],
@@ -58,10 +42,29 @@ angular.module('myApp.controllers', [])
                     }
                 },
                 layers: {
-
+                    baselayers: {
+                        xyz: {
+                            name: 'OpenStreetMap',
+                            url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            type: 'xyz'
+                        }
+                    }
+                },
+                paths:{
+                    p1: {
+                        color: '#008000',
+                        weight: 2,
+                        latlngs: [
+                            { lat: 45.560193, lng: 8.049105 },
+                            { lat: 45.564775, lng: 8.049105 },
+                            { lat: 45.564775, lng: 8.062656 },
+                            { lat: 45.560193, lng: 8.062656 },
+                            { lat: 45.560193, lng: 8.049105 }
+                        ]
+                    }
                 },
                 defaults: {
-                    scrollWheelZoom: false
+                    scrollWheelZoom: true
                 }
             });
 
@@ -69,6 +72,7 @@ angular.module('myApp.controllers', [])
                 $scope.ess.lat = $scope.markers[0].lat;
                 $scope.ess.lng = $scope.markers[0].lng;
             });
+//=======================================================================================================
 //=======================================================================================================
             $scope.$on("leafletDirectiveMarker.click", function(event, args){
                 var leafEvent = args.leafletEvent;
@@ -80,33 +84,39 @@ angular.module('myApp.controllers', [])
             });
 //=======================================================================================================
 //=======================================================================================================
-//=======================================================================================================
-//=======================================================================================================
-//=======================================================================================================
-            $scope.center= {
-                lat: Number($scope.defaultLat),
-                lng: Number($scope.defaultLng),
-                zoom: 13
-            };
-
             $scope.addMarkers = function(allMarkers, position) {
                 $scope.center= {
                     lat: Number(position.lat),
                     lng: Number(position.lng),
                     zoom: 12
                 },
-                    $scope.markers= allMarkers,
-                    $scope.defaults= {
-                        //tileLayer: "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
-                        maxZoom: 18,
-                        path: {
-                            weight: 10,
-                            color: '#8C92AC',
-                            opacity: 1
-                        }
+                $scope.markers= allMarkers,
+                $scope.defaults= {
+                    maxZoom: 18,
+                    path: {
+                         weight: 10,
+                         color: '#8C92AC',
+                         opacity: 1
+                    }
+                };
+            };
+//=======================================================================================================
+//=======================================================================================================
+            $scope.addPolygon = function(polygonData){
+                    $scope.baselayers= {
+                        name: 'OpenStreetMap (XYZ)',
+                        url:  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        type: 'xyz'
                     };
+                    $scope.overlays = polygonData;
+                $scope.layers={
+                    baselayers: baselayers,
+                    overlays: overlays
+                }
             };
 
+//=======================================================================================================
+//=======================================================================================================
             $scope.getMaxLat = function(array){
                 var len = array.length, max = -Infinity;
                 while (len--) {
@@ -157,19 +167,32 @@ angular.module('myApp.controllers', [])
              */
             $scope.performGridOnBox = function(callback){
                 $scope.showBoxList = true;
+
+                /**
+                 * the four corners of the bounding box and cell depth of the square
+                 */
                 var bbox = [Number($scope.bbox.south), Number($scope.bbox.west), Number($scope.bbox.north), Number($scope.bbox.east)];
                 var cellSize = Number($scope.bbox.cellDepth);
                 var units = 'kilometers';
 
+
+                //Takes a bbox and returns an equivalent polygon
+                var poly = turf.bboxPolygon(bbox);
+               // $scope.addPolygon(poly);
+
+                console.log("the poly= "+JSON.stringify(poly));
+
                 var squareGrid = turf.squareGrid(bbox, cellSize, units);
                 var i=0;
                 var allSquares = [];
+
                 squareGrid.features.forEach(function (feature) {
                     allSquares.push({name: i, value:feature.geometry.coordinates[0]});
                     i++;
                 });
                 callback(allSquares);
             };
+
             $scope.allBboxArray = [];
             $rootScope.markerData =[];
             $scope.getAllSquareGrids = function(){
@@ -244,7 +267,8 @@ angular.module('myApp.controllers', [])
              */
 
             $scope.fetchData = function(){
-                dataFactory.getPOIInBbox(Number($scope.selectedBbox.allBboxArray.value[0]),
+                dataFactory.getPOIInBbox(
+                    Number($scope.selectedBbox.allBboxArray.value[0]),
                     Number($scope.selectedBbox.allBboxArray.value[1]),
                     Number($scope.selectedBbox.allBboxArray.value[2]),
                     Number($scope.selectedBbox.allBboxArray.value[3]),

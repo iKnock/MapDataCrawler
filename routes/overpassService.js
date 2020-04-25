@@ -23,7 +23,7 @@ getQueryAmenity = function(south,west,north,east,boxId, callback) {
                     callback('success');
                 }else{
                     callback('error');
-                    console.log('Error fetching data!');
+                    console.log('Error fetching data at amenity!');
                 }
                 //res.json(data);
             }, flatProperties);
@@ -48,7 +48,7 @@ getQueryTourism = function(south,west,north,east,boxId, callback) {
                     callback('success');
                 }else{
                     callback('error');
-                    console.log('Error fetching data!');
+                    console.log('Error fetching data at tourism!');
                 }
             }, flatProperties);
         }
@@ -72,7 +72,7 @@ getQueryShop = function(south,west,north,east,boxId, callback) {
                     callback('success');
                 }else{
                     callback('error');
-                    console.log('Error fetching data!');
+                    console.log('Error fetching data at shop!');
                 }
             }, flatProperties);
         }
@@ -96,6 +96,7 @@ getQuerySport = function(south,west,north,east,boxId, callback) {
                     callback('success');
                 }else{
                     callback('error');
+                    console.log('Error fetching data at sport!');
                 }
             }, flatProperties);
         }
@@ -194,10 +195,12 @@ countDataInTableByCategory = function(category, index, callback) {
             var counter=0;
             var tblName = category+tblKeyWord+index;
             // Get the documents collection
+            console.log("tableName= "+tblName);
             var collection = db.collection(tblName);
             // Find some documents
             collection.find({}).toArray(function(err, data) {
                 if(!err){
+                    console.log("the data== "+JSON.stringify(data));
                     counter = data[0].data.features.length;
                     categoryInBox = {boxId: data[0].boxId, south: data[0].south, west: data[0].west, north: data[0].north, east: data[0].east, category: counter};
                     callback(categoryInBox);
@@ -459,8 +462,28 @@ exports.pointOfInterestInBbox = function(req, res) {
         console.log('inserted!');
         getQueryAmenity(south,west,north,east,boxId, function(inserted){
             if(inserted=='success'){
-                console.log("query amenity is called");
-                res.json([{inserted: true}]);
+                //console.log("query amenity is called");
+                //res.json([{inserted: true}]);
+
+                getQueryTourism(south,west,north,east,boxId, function(inserted){
+                    if(inserted=='success'){
+                        getQueryShop(south,west,north,east,boxId, function(inserted){
+                            if(inserted=='success'){
+                               getQuerySport(south,west,north,east,boxId, function(inserted){
+                                    if(inserted=='success'){
+                                        getQueryTourism(south,west,north,east,boxId, function(inserted){
+                                            if(inserted=='success'){
+                                                res.json([{inserted: true}]);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+
                 /**setTimeout(getQueryTourism(south,west,north,east,boxId, function(inserted){
                     if(inserted=='success'){
                         setTimeout(getQueryShop(south,west,north,east,boxId, function(inserted){
