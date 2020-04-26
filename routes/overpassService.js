@@ -462,9 +462,6 @@ exports.pointOfInterestInBbox = function(req, res) {
         console.log('inserted!');
         getQueryAmenity(south,west,north,east,boxId, function(inserted){
             if(inserted=='success'){
-                //console.log("query amenity is called");
-                //res.json([{inserted: true}]);
-
                 getQueryTourism(south,west,north,east,boxId, function(inserted){
                     if(inserted=='success'){
                         getQueryShop(south,west,north,east,boxId, function(inserted){
@@ -482,25 +479,6 @@ exports.pointOfInterestInBbox = function(req, res) {
                         });
                     }
                 });
-
-
-                /**setTimeout(getQueryTourism(south,west,north,east,boxId, function(inserted){
-                    if(inserted=='success'){
-                        setTimeout(getQueryShop(south,west,north,east,boxId, function(inserted){
-                            if(inserted=='success'){
-                                setTimeout(getQuerySport(south,west,north,east,boxId, function(inserted){
-                                    if(inserted=='success'){
-                                        setTimeout(getQueryTourism(south,west,north,east,boxId, function(inserted){
-                                            if(inserted=='success'){
-                                                res.json([{inserted: true}]);
-                                            }
-                                        }), 3000);
-                                    }
-                                }), 3000);
-                            }
-                        }), 3000);
-                    }
-                }), 3000);**/
             }
         });
     });

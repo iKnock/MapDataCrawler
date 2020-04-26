@@ -41,26 +41,13 @@ angular.module('myApp.controllers', [])
                         logic: 'emit'
                     }
                 },
-                layers: {
-                    baselayers: {
-                        xyz: {
+                            layers: {
+                                baselayers: {
+                                    xyz: {
                             name: 'OpenStreetMap',
                             url: 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                             type: 'xyz'
                         }
-                    }
-                },
-                paths:{
-                    p1: {
-                        color: '#008000',
-                        weight: 2,
-                        latlngs: [
-                            { lat: 45.560193, lng: 8.049105 },
-                            { lat: 45.564775, lng: 8.049105 },
-                            { lat: 45.564775, lng: 8.062656 },
-                            { lat: 45.560193, lng: 8.062656 },
-                            { lat: 45.560193, lng: 8.049105 }
-                        ]
                     }
                 },
                 defaults: {
@@ -68,6 +55,8 @@ angular.module('myApp.controllers', [])
                 }
             });
 
+//=======================================================================================================
+//=======================================================================================================
             $scope.$on('leafletDirectiveMarker.dragend', function(event){
                 $scope.ess.lat = $scope.markers[0].lat;
                 $scope.ess.lng = $scope.markers[0].lng;
@@ -100,21 +89,21 @@ angular.module('myApp.controllers', [])
                     }
                 };
             };
-//=======================================================================================================
-//=======================================================================================================
-            $scope.addPolygon = function(polygonData){
-                    $scope.baselayers= {
-                        name: 'OpenStreetMap (XYZ)',
-                        url:  'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        type: 'xyz'
-                    };
-                    $scope.overlays = polygonData;
-                $scope.layers={
-                    baselayers: baselayers,
-                    overlays: overlays
-                }
-            };
 
+//=======================================================================================================
+//=======================================================================================================
+            $scope.addPath = function(color, weight, latlng) {
+                leafletData.getMap('map').then(function(map) {
+                    L.polygon(latlng,
+                        {
+                            color: color,
+                            fillColor: '#f03',
+                            fillOpacity: 0.5
+                        }
+                    ).addTo(map);
+                });
+            };
+//=======================================================================================================
 //=======================================================================================================
 //=======================================================================================================
             $scope.getMaxLat = function(array){
@@ -167,29 +156,53 @@ angular.module('myApp.controllers', [])
              */
             $scope.performGridOnBox = function(callback){
                 $scope.showBoxList = true;
-
+                var latlngs =[];
+                $scope.addPath('green',2,latlngs);
                 /**
                  * the four corners of the bounding box and cell depth of the square
                  */
                 var bbox = [Number($scope.bbox.south), Number($scope.bbox.west), Number($scope.bbox.north), Number($scope.bbox.east)];
+                console.log("bbox= "+bbox);
                 var cellSize = Number($scope.bbox.cellDepth);
                 var units = 'kilometers';
 
 
                 //Takes a bbox and returns an equivalent polygon
                 var poly = turf.bboxPolygon(bbox);
-               // $scope.addPolygon(poly);
-
+                // $scope.addPolygon(poly);
                 console.log("the poly= "+JSON.stringify(poly));
+
+                // var corrds = turf.getCoords(poly);
+                //console.log("the poly coords= "+JSON.stringify(corrds));
 
                 var squareGrid = turf.squareGrid(bbox, cellSize, units);
                 var i=0;
                 var allSquares = [];
 
+                console.log("the squareGrid= "+JSON.stringify(squareGrid));
+
+                //arrange the square grid into unique name and value containing the corrdinates of the grid
                 squareGrid.features.forEach(function (feature) {
-                    allSquares.push({name: i, value:feature.geometry.coordinates[0]});
+                    allSquares.push({name: i, value: feature.geometry.coordinates[0]});
                     i++;
                 });
+
+                for(var j=0; j<allSquares.length; j++){
+                    for(var k=0; k<allSquares[j].value.length; k++){
+                        latlngs.push({lat: allSquares[j].value[k][0], lng: allSquares[j].value[k][1]});
+                        if(k==4){
+                            console.log("latlng: "+JSON.stringify(latlngs));
+                            $scope.addPath('green',2,latlngs);
+                            latlngs = [];
+                        }
+                    }
+                }
+
+
+
+                //the array containing the corrdinates of the created square grids
+                console.log("the square grids== "+JSON.stringify(allSquares));
+
                 callback(allSquares);
             };
 
@@ -235,6 +248,7 @@ angular.module('myApp.controllers', [])
                                 $scope.bboxSquares = [minLat,minLong,maxLat,maxLong];
                                 $scope.allBboxArray.push({name: 'box'+i, value: $scope.bboxSquares, boxSize:$scope.squareGrids.length});
                             }
+
                             $scope.showGridParam = true;
                         }else{
                             console.log('Null Value occur!!!');
